@@ -12,7 +12,7 @@ from utils.data_fetchers import get_all_data
 from utils.risk_engine import compute_risk_score
 
 st.set_page_config(
-    page_title="My Report — Crest",
+    page_title="My Report — Waterline",
     page_icon="📄",
     layout="wide",
 )
@@ -32,7 +32,7 @@ forecast = data.get("forecast") or {}
 river_gauge = data.get("river_gauge")
 
 st.markdown(
-    "<div style='font-size:0.8rem; color:#64748b;'>🌊 Crest</div>",
+    "<div style='font-size:0.8rem; color:#64748b;'>🌊 Waterline</div>",
     unsafe_allow_html=True,
 )
 st.title("📄 My Resilience Report")
