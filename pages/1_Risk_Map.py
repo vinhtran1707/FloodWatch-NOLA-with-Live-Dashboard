@@ -45,7 +45,7 @@ from utils.risk_engine import (
 from utils.swbno_data import STATUS_COLORS
 
 st.set_page_config(
-    page_title="Risk Map — FloodWatch NOLA",
+    page_title="Risk Map — Crest",
     page_icon="📍",
     layout="wide",
 )
@@ -72,7 +72,7 @@ _raw_social = data.get("social_feed") or []
 social_posts = geolocate_social_posts(_raw_social)
 social_mapped = [p for p in social_posts if "lat" in p]
 
-st.markdown("<div style='font-size:0.8rem; color:#64748b;'>🌊 FloodWatch NOLA</div>", unsafe_allow_html=True)
+st.markdown("<div style='font-size:0.8rem; color:#64748b;'>🌊 Crest</div>", unsafe_allow_html=True)
 st.title("📍 Risk Map — Orleans Parish")
 
 # ── Sidebar ────────────────────────────────────────────────────────────────
