@@ -72,7 +72,7 @@ _raw_social = data.get("social_feed") or []
 social_posts = geolocate_social_posts(_raw_social)
 social_mapped = [p for p in social_posts if "lat" in p]
 
-st.markdown("<div style='font-size:0.8rem; color:#94a3b8;'>🌊 FloodWatch NOLA</div>", unsafe_allow_html=True)
+st.markdown("<div style='font-size:0.8rem; color:#64748b;'>🌊 FloodWatch NOLA</div>", unsafe_allow_html=True)
 st.title("📍 Risk Map — Orleans Parish")
 
 # ── Sidebar ────────────────────────────────────────────────────────────────
@@ -145,8 +145,8 @@ outlook = neighborhood_plain_language(
 )
 _risk_color = risk["color"]
 st.markdown(
-    f"<div style='background:#1e293b; border-radius:10px; padding:1rem 1.25rem; "
-    f"border-left:4px solid {_risk_color}; margin-bottom:1rem;'>{outlook}</div>",
+    f"<div style='background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:1rem 1.25rem; "
+    f"color:#0f172a; border-left:4px solid {_risk_color}; margin-bottom:1rem;'>{outlook}</div>",
     unsafe_allow_html=True,
 )
 
@@ -498,10 +498,10 @@ legend_html = """
               background:linear-gradient(to right,#10b981,#f59e0b,#f97316,#ef4444);
               height:10px; border-radius:5px; width:160px;'></div>
   <div style='display:flex; justify-content:space-between; width:160px;
-              font-size:9px; color:#94a3b8; margin-bottom:4px;'>
+              font-size:9px; color:#64748b; margin-bottom:4px;'>
     <span>Clear</span><span>Wet</span><span>Flooding</span><span>Severe</span>
   </div>
-  <span style='font-size:10px; color:#94a3b8;'>Thicker line = deeper water</span><br>
+  <span style='font-size:10px; color:#64748b;'>Thicker line = deeper water</span><br>
   <br>
   <b style='color:#f1f5f9;'>Pump Stations</b><br>
   <span style='color:#10b981;'>⬤</span> <span style='color:#e2e8f0;'>PUMPING</span> &nbsp;
@@ -552,12 +552,12 @@ with tab1:
                 if seg["nearby_complaints"] > 0 else ""
             )
             st.markdown(
-                f"<div style='padding:10px 14px; margin-bottom:8px; background:#1e293b; "
+                f"<div style='padding:10px 14px; margin-bottom:8px; background:#ffffff; border:1px solid #e2e8f0; "
                 f"border-left:4px solid {color}; border-radius:0 8px 8px 0;'>"
-                f"<b style='color:#f1f5f9;'>{seg['name']}</b>"
+                f"<b style='color:#0f172a;'>{seg['name']}</b>"
                 f"<span style='color:{color}; font-weight:700; margin-left:10px;'>{depth_label}</span>"
                 f"{complaints_badge}<br>"
-                f"<span style='color:#94a3b8; font-size:0.82rem;'>"
+                f"<span style='color:#64748b; font-size:0.82rem;'>"
                 f"{passability} &nbsp;|&nbsp; "
                 f"Elev: {seg['elevation_ft']:+.1f} ft &nbsp;|&nbsp; "
                 f"Pump: {seg['pump_status']} &nbsp;|&nbsp; Score: {seg['score']}/100</span>"
@@ -583,10 +583,10 @@ with tab1:
             except (ValueError, TypeError):
                 loc_str = "No coordinates"
             st.markdown(
-                f"<div style='padding:8px 12px; margin-bottom:6px; background:#1e293b; "
+                f"<div style='padding:8px 12px; margin-bottom:6px; background:#ffffff; border:1px solid #e2e8f0; "
                 f"border-left:3px solid #a855f7; border-radius:0 6px 6px 0;'>"
-                f"<b style='color:#f1f5f9;'>{reason}</b> {'🔵 Demo' if is_mock else ''}<br>"
-                f"<span style='color:#94a3b8; font-size:0.8rem;'>"
+                f"<b style='color:#0f172a;'>{reason}</b> {'🔵 Demo' if is_mock else ''}<br>"
+                f"<span style='color:#64748b; font-size:0.8rem;'>"
                 f"#{svc_req} &nbsp;·&nbsp; {date} &nbsp;·&nbsp; 📍 {loc_str}</span>"
                 f"</div>",
                 unsafe_allow_html=True,
