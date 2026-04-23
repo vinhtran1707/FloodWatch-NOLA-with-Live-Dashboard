@@ -1,6 +1,6 @@
-# FloodWatch NOLA
+# Crest
 
-FloodWatch NOLA is a flood resilience intelligence platform for small businesses and renters in Orleans Parish, New Orleans. It combines live data from NOAA, USGS, and SWBNO into a composite risk score that goes beyond FEMA's static flood maps — the only platform that factors in real-time drainage pump station status when calculating risk.
+Crest is a flood resilience intelligence platform for small businesses and renters in Orleans Parish, New Orleans. It combines live data from NOAA, USGS, and SWBNO into a composite risk score that goes beyond FEMA's static flood maps — the only platform that factors in real-time drainage pump station status when calculating risk.
 
 Built for the Tulane University Freeman School of Business AI Innovation Challenge with BoodleBox (2026), the platform gives vulnerable communities actionable, personalized intelligence before, during, and after storm events. Features include an interactive risk map, SWBNO infrastructure deep-dive, an AI flood navigator (FloodBot), and downloadable resilience reports tailored to property type.
 
