@@ -14,7 +14,7 @@ from utils.data_fetchers import get_all_data
 from utils.swbno_data import STATUS_COLORS
 
 st.set_page_config(
-    page_title="Infrastructure — Crest",
+    page_title="Infrastructure — Waterline",
     page_icon="⚙️",
     layout="wide",
 )
@@ -33,7 +33,7 @@ stations = swbno.get("stations", [])
 basins = swbno.get("drainage_basins", [])
 
 st.markdown(
-    "<div style='font-size:0.8rem; color:#64748b;'>🌊 Crest</div>",
+    "<div style='font-size:0.8rem; color:#64748b;'>🌊 Waterline</div>",
     unsafe_allow_html=True,
 )
 st.title("⚙️ Infrastructure Status — SWBNO")
