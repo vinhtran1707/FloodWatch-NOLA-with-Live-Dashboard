@@ -19,7 +19,7 @@ from utils.risk_engine import compute_risk_score, score_neighborhood_streets
 from utils.swbno_data import STATUS_COLORS
 
 st.set_page_config(
-    page_title="Storm Simulator — FloodWatch NOLA",
+    page_title="Storm Simulator — Crest",
     page_icon="⛈️",
     layout="wide",
 )
@@ -306,7 +306,7 @@ def _reset_sim() -> None:
 
 # ── Header ─────────────────────────────────────────────────────────────────
 st.markdown(
-    "<div style='font-size:0.8rem; color:#64748b;'>🌊 FloodWatch NOLA</div>",
+    "<div style='font-size:0.8rem; color:#64748b;'>🌊 Crest</div>",
     unsafe_allow_html=True,
 )
 
