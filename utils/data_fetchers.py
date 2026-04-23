@@ -9,7 +9,7 @@ import streamlit as st
 
 from .swbno_data import get_swbno_status
 
-_HEADERS = {"User-Agent": "FloodWatchNOLA/1.0 (tulane.edu competition)"}
+_HEADERS = {"User-Agent": "Crest/1.0 (tulane.edu competition)"}
 _TIMEOUT = 10
 
 _MOCK_311 = [
