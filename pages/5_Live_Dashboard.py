@@ -817,6 +817,18 @@ tab_ind, tab_biz = st.tabs(["👤  Individual", "🏢  Small Business"])
 # ───────────────────────────────────────────────────────────────────────────
 # HELPER — render a KPI tile
 # ───────────────────────────────────────────────────────────────────────────
+
+def get_risk_microcopy(level: str) -> str:
+    """Short Apple/Google-style helper copy for the headline risk card."""
+    if level == "LOW":
+        return "Low risk. Flooding is unlikely under current conditions."
+    elif level == "MODERATE":
+        return "Moderate risk. Minor water buildup possible in low-lying areas."
+    elif level == "HIGH":
+        return "High risk. Street flooding and travel disruption are possible."
+    return "Critical risk. Flooding is likely and conditions may become hazardous."
+
+
 def render_tile(label: str, value: str, sub: str = "", accent: str = "green",
                 delay: int = 1):
     """Render a KPI tile. `delay` 1-4 staggers the fade-in animation."""
@@ -1345,16 +1357,21 @@ with tab_ind:
     # ── Headline strip (mode-aware narrative) ──────────────────────
     # Build the explanation line + optional advisory chip based on risk mode
     has_infra_issue = (reliability["score"] < 75) or (capacity_mult < 0.95)
+    risk_microcopy = get_risk_microcopy(adj_level)
 
     if risk_mode == "dry":
-        # Sunny / low-rain day — don't penalize for infrastructure, show as advisory
+        # Sunny / low-rain day — keep the main line product-clean and move
+        # the technical explanation into a lighter secondary line.
         explanation_html = (
-            f"<div style='font-size:0.85rem; color:#475569; margin-top:0.15rem;'>"
-            f"☀️ Low rain forecast ({precip_pct}%) — current risk reflects weather only"
+            f"<div style='font-size:0.85rem; color:#475569; margin-top:0.15rem; "
+            f"font-weight:500;'>"
+            f"{risk_microcopy}"
+            f"</div>"
+            f"<div style='font-size:0.78rem; color:#94a3b8; margin-top:0.2rem;'>"
+            f"Low rain forecast ({precip_pct}%) — current risk reflects weather only"
             f"</div>"
         )
         if has_infra_issue:
-            # Neutral informational chip, not a score penalty
             issue_text = []
             if reliability["score"] < 75:
                 issue_text.append(f"pump reliability {reliability['score']}/100")
@@ -1370,29 +1387,34 @@ with tab_ind:
                 f"</div>"
             )
     elif risk_mode == "watch":
-        # Some rain expected, moderate compounding
         explanation_html = (
-            f"<div style='font-size:0.85rem; color:#475569; margin-top:0.15rem;'>"
-            f"🌦️ Rain expected ({precip_pct}%) — weather {composite_base}"
+            f"<div style='font-size:0.85rem; color:#475569; margin-top:0.15rem; "
+            f"font-weight:500;'>"
+            f"{risk_microcopy}"
+            f"</div>"
+            f"<div style='font-size:0.78rem; color:#94a3b8; margin-top:0.2rem;'>"
+            f"Rain expected ({precip_pct}%) — weather {composite_base}"
         )
         if reliability_drag + capacity_drag > 0.5:
             explanation_html += (
                 f" + infrastructure +{int(reliability_drag + capacity_drag)} "
-                f"<span style='color:#64748b;'>({int(rain_multiplier*100)}% applied)</span>"
+                f"<span style='color:#94a3b8;'>({int(rain_multiplier*100)}% applied)</span>"
             )
         explanation_html += "</div>"
     else:  # active
-        # Rain is happening, show full compounding story
         explanation_html = (
-            f"<div style='font-size:0.85rem; color:#475569; margin-top:0.15rem;'>"
-            f"🌧️ Active rain ({precip_pct}%) — weather {composite_base}"
+            f"<div style='font-size:0.85rem; color:#475569; margin-top:0.15rem; "
+            f"font-weight:500;'>"
+            f"{risk_microcopy}"
+            f"</div>"
+            f"<div style='font-size:0.78rem; color:#94a3b8; margin-top:0.2rem;'>"
+            f"Active rain ({precip_pct}%) — weather {composite_base}"
         )
         if reliability_drag > 0.5:
             explanation_html += f" + pump reliability +{int(reliability_drag)}"
         if capacity_drag > 0.5:
             explanation_html += f" + drainage capacity +{int(capacity_drag)}"
         explanation_html += "</div>"
-
     st.markdown(
         f"<div class='fw-card fw-card-headline {adj_bg}' style='margin-top:1rem;'>"
         f"<div style='display:flex; align-items:center; gap:1.5rem;'>"
