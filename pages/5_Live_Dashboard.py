@@ -893,6 +893,90 @@ def render_precip_chart(hourly: list):
 
 
 # ───────────────────────────────────────────────────────────────────────────
+# HELPER — render the 0–100 risk scale visualization
+# ───────────────────────────────────────────────────────────────────────────
+def render_risk_scale(score: int, level: str, color: str):
+    """
+    Horizontal 0-100 flood risk scale with four colored bands, tick marks,
+    band labels, and a marker showing the current score.
+    """
+    # Clamp and compute marker position as percentage
+    pos = max(0, min(100, score))
+
+    # Pointer width calculation so the caret doesn't clip at edges
+    # Use percentage-based positioning that handles edges gracefully
+    if pos <= 5:
+        marker_style = "left: 0%; transform: translateX(0);"
+        label_style = "left: 0%; transform: translateX(0);"
+    elif pos >= 95:
+        marker_style = "left: 100%; transform: translateX(-100%);"
+        label_style = "left: 100%; transform: translateX(-100%);"
+    else:
+        marker_style = f"left: {pos}%; transform: translateX(-50%);"
+        label_style = f"left: {pos}%; transform: translateX(-50%);"
+
+    html = f"""
+    <div style='background:#ffffff; border:1px solid #e2e8f0; border-radius:12px;
+                padding:0.9rem 1.1rem 0.75rem 1.1rem; margin-bottom:1rem;
+                box-shadow:0 1px 2px rgba(15,23,42,0.03);'>
+      <div style='display:flex; justify-content:space-between; align-items:baseline;
+                  margin-bottom:0.6rem;'>
+        <div style='font-size:0.7rem; font-weight:700; color:#64748b;
+                    letter-spacing:0.08em;'>RISK SCALE · 0–100</div>
+        <div style='font-size:0.78rem; color:#64748b; font-weight:500;'>
+          Where <b style='color:{color};'>{score}</b> lands
+        </div>
+      </div>
+
+      <!-- Pointer callout above the bar -->
+      <div style='position:relative; height:28px; margin-bottom:4px;'>
+        <div style='position:absolute; {label_style} top:0;
+                    background:{color}; color:white;
+                    font-size:0.75rem; font-weight:700; padding:3px 10px;
+                    border-radius:6px; white-space:nowrap;
+                    box-shadow:0 2px 4px rgba(0,0,0,0.12);'>
+          {score} · {level}
+          <div style='position:absolute; bottom:-4px; left:50%; transform:translateX(-50%) rotate(45deg);
+                      width:8px; height:8px; background:{color};'></div>
+        </div>
+      </div>
+
+      <!-- Colored band bar -->
+      <div style='position:relative; height:14px; border-radius:7px; overflow:hidden;
+                  background:linear-gradient(to right,
+                    #16a34a 0%,   #16a34a 25%,
+                    #f59e0b 25%,  #f59e0b 50%,
+                    #dc2626 50%,  #dc2626 75%,
+                    #991b1b 75%,  #991b1b 100%);'>
+        <!-- Marker line on the bar -->
+        <div style='position:absolute; {marker_style} top:-3px;
+                    width:4px; height:20px; background:#ffffff;
+                    border:1.5px solid {color}; border-radius:2px;
+                    box-shadow:0 1px 3px rgba(0,0,0,0.2);'></div>
+      </div>
+
+      <!-- Band labels below -->
+      <div style='display:grid; grid-template-columns: repeat(4, 1fr); margin-top:6px;
+                  font-size:0.68rem; text-align:center; line-height:1.2;'>
+        <div style='color:#16a34a; font-weight:600;'>
+          LOW<br><span style='color:#94a3b8; font-weight:500;'>0–24</span>
+        </div>
+        <div style='color:#f59e0b; font-weight:600;'>
+          MODERATE<br><span style='color:#94a3b8; font-weight:500;'>25–49</span>
+        </div>
+        <div style='color:#dc2626; font-weight:600;'>
+          HIGH<br><span style='color:#94a3b8; font-weight:500;'>50–74</span>
+        </div>
+        <div style='color:#991b1b; font-weight:600;'>
+          CRITICAL<br><span style='color:#94a3b8; font-weight:500;'>75–100</span>
+        </div>
+      </div>
+    </div>
+    """
+    st.markdown(html, unsafe_allow_html=True)
+
+
+# ───────────────────────────────────────────────────────────────────────────
 # HELPER — render the interactive light-mode flood map
 # ───────────────────────────────────────────────────────────────────────────
 def render_flood_map(
@@ -1326,6 +1410,9 @@ with tab_ind:
         unsafe_allow_html=True,
     )
 
+    # ── 0-100 risk scale visualization ─────────────────────────────
+    render_risk_scale(adjusted_score, adj_level, adj_color)
+
     # ── KPI row ────────────────────────────────────────────────────
     k1, k2, k3, k4 = st.columns(4)
     with k1:
@@ -1595,6 +1682,9 @@ with tab_biz:
             f"</div></div></div>",
             unsafe_allow_html=True,
         )
+
+    # ── 0-100 risk scale visualization ─────────────────────────────
+    render_risk_scale(adjusted_score, adj_level, adj_color)
 
     # ── KPI row ────────────────────────────────────────────────────
     b_k1, b_k2, b_k3, b_k4 = st.columns(4)
