@@ -77,7 +77,7 @@ except ImportError:
 
 
 # ── Page config + theme override ───────────────────────────────────────────
-st.set_page_config(page_title="Live Dashboard · Crest",
+st.set_page_config(page_title="Live Dashboard · Waterline",
                    page_icon="🌊", layout="wide")
 
 # Hard-override any inherited dark styling from the rest of the app.
