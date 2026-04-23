@@ -756,12 +756,38 @@ reliability = reliability_score_for_station(station_id) if station_id else {
 # Drainage capacity multiplier for the neighborhood (0.1 to 1.2)
 capacity_mult = capacity_adjustment_for_neighborhood(neighborhood)
 
-# Reliability-adjusted composite risk: if the serving station's reliability is
-# below baseline OR capacity is degraded, bump up the risk score.
+# ── Rain-gated risk model ──────────────────────────────────────
+# Key insight: infrastructure weakness is a LATENT risk on dry days and an
+# ACTIVE risk when rainfall is expected. A broken pump on a sunny day isn't
+# a flood risk — it's an advisory. So we scale the drag by a rain multiplier
+# that's zero below 20% precip probability and ramps to full at 100%.
 composite_base = risk["score"]
-reliability_drag = max(0, (75 - reliability["score"])) * 0.35
-capacity_drag = max(0, (1.0 - capacity_mult)) * 40
+precip_pct = risk["precip_pct"]
+river_ft = risk["river_ft"]
+
+# Raw drag components — these are the "potential" drag when it rains
+raw_reliability_drag = max(0, (75 - reliability["score"])) * 0.35
+raw_capacity_drag = max(0, (1.0 - capacity_mult)) * 40
+raw_total_drag = raw_reliability_drag + raw_capacity_drag
+
+# Rain multiplier: 0 below 20% precip, linearly ramps to 1.0 at 100%
+rain_multiplier = max(0.0, min(1.0, (precip_pct - 20) / 80))
+
+# Active (applied) drag — what actually inflates the score
+reliability_drag = raw_reliability_drag * rain_multiplier
+capacity_drag = raw_capacity_drag * rain_multiplier
 adjusted_score = int(min(100, composite_base + reliability_drag + capacity_drag))
+
+# Risk mode determines the narrative framing
+# - dry: infrastructure is an advisory, not a score penalty
+# - active: infrastructure compounds with rain
+# - high: both rain and infrastructure are serious
+if precip_pct < 20:
+    risk_mode = "dry"
+elif precip_pct < 50:
+    risk_mode = "watch"
+else:
+    risk_mode = "active"
 
 if adjusted_score < 25:
     adj_level, adj_color, adj_bg = "LOW", "#16a34a", "fw-card-green"
@@ -772,8 +798,6 @@ elif adjusted_score < 75:
 else:
     adj_level, adj_color, adj_bg = "CRITICAL", "#991b1b", "fw-card-red"
 
-precip_pct = risk["precip_pct"]
-river_ft = risk["river_ft"]
 temp = forecast.get("temperature", "—")
 temp_unit = forecast.get("temperatureUnit", "F")
 short_fc = forecast.get("shortForecast", "—")
@@ -1234,7 +1258,57 @@ with tab_ind:
         f"</div>"
     )
 
-    # ── Headline strip ─────────────────────────────────────────────
+    # ── Headline strip (mode-aware narrative) ──────────────────────
+    # Build the explanation line + optional advisory chip based on risk mode
+    has_infra_issue = (reliability["score"] < 75) or (capacity_mult < 0.95)
+
+    if risk_mode == "dry":
+        # Sunny / low-rain day — don't penalize for infrastructure, show as advisory
+        explanation_html = (
+            f"<div style='font-size:0.85rem; color:#475569; margin-top:0.15rem;'>"
+            f"☀️ Low rain forecast ({precip_pct}%) — current risk reflects weather only"
+            f"</div>"
+        )
+        if has_infra_issue:
+            # Neutral informational chip, not a score penalty
+            issue_text = []
+            if reliability["score"] < 75:
+                issue_text.append(f"pump reliability {reliability['score']}/100")
+            if capacity_mult < 0.95:
+                issue_text.append(f"drainage at {int(capacity_mult*100)}% capacity")
+            advisory_line = " · ".join(issue_text)
+            explanation_html += (
+                f"<div style='display:inline-flex; align-items:center; gap:0.4rem; "
+                f"background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; "
+                f"border-radius:8px; padding:4px 10px; margin-top:0.5rem; "
+                f"font-size:0.78rem; font-weight:500;'>"
+                f"ℹ️ <b>Infrastructure advisory:</b> {advisory_line} — will compound if rain arrives"
+                f"</div>"
+            )
+    elif risk_mode == "watch":
+        # Some rain expected, moderate compounding
+        explanation_html = (
+            f"<div style='font-size:0.85rem; color:#475569; margin-top:0.15rem;'>"
+            f"🌦️ Rain expected ({precip_pct}%) — weather {composite_base}"
+        )
+        if reliability_drag + capacity_drag > 0.5:
+            explanation_html += (
+                f" + infrastructure +{int(reliability_drag + capacity_drag)} "
+                f"<span style='color:#64748b;'>({int(rain_multiplier*100)}% applied)</span>"
+            )
+        explanation_html += "</div>"
+    else:  # active
+        # Rain is happening, show full compounding story
+        explanation_html = (
+            f"<div style='font-size:0.85rem; color:#475569; margin-top:0.15rem;'>"
+            f"🌧️ Active rain ({precip_pct}%) — weather {composite_base}"
+        )
+        if reliability_drag > 0.5:
+            explanation_html += f" + pump reliability +{int(reliability_drag)}"
+        if capacity_drag > 0.5:
+            explanation_html += f" + drainage capacity +{int(capacity_drag)}"
+        explanation_html += "</div>"
+
     st.markdown(
         f"<div class='fw-card fw-card-headline {adj_bg}' style='margin-top:1rem;'>"
         f"<div style='display:flex; align-items:center; gap:1.5rem;'>"
@@ -1243,11 +1317,9 @@ with tab_ind:
         f"</div>"
         f"<div style='flex:1;'>"
         f"<div style='font-size:0.72rem; color:#64748b; font-weight:700; letter-spacing:0.08em;'>"
-        f"RELIABILITY-ADJUSTED RISK · {neighborhood.upper()}</div>"
+        f"FLOOD RISK · {neighborhood.upper()}</div>"
         f"<div style='font-size:1.3rem; font-weight:800; color:{adj_color};'>{adj_level} RISK</div>"
-        f"<div style='font-size:0.85rem; color:#475569; margin-top:0.15rem;'>"
-        f"Base composite {composite_base} + reliability drag {int(reliability_drag)} "
-        f"+ capacity drag {int(capacity_drag)}</div>"
+        f"{explanation_html}"
         f"</div>"
         f"{sparkline_svg}"
         f"</div></div>",
@@ -1484,24 +1556,45 @@ with tab_biz:
     # Business continuity score — inverse of risk, reliability-weighted
     continuity_score = int(max(0, 100 - adjusted_score * 0.8))
 
-    # ── Headline card ─────────────────────────────────────────────
-    st.markdown(
-        f"<div class='fw-card fw-card-headline {adj_bg}'>"
-        f"<div style='display:flex; align-items:center; gap:1.5rem;'>"
-        f"<div class='fw-fade-in' style='font-size:3rem; font-weight:900; color:{adj_color}; line-height:1;'>"
-        f"${revenue_at_risk:,}</div>"
-        f"<div style='flex:1;'>"
-        f"<div style='font-size:0.72rem; color:#64748b; font-weight:700; letter-spacing:0.08em;'>"
-        f"REVENUE AT RISK · NEXT 24 HOURS</div>"
-        f"<div style='font-size:1rem; font-weight:600; color:#0f172a;'>"
-        f"{expected_hours_lost:.1f} expected hours of disruption · "
-        f"{int(closure_prob*100)}% closure probability</div>"
-        f"<div style='font-size:0.82rem; color:#64748b; margin-top:0.2rem;'>"
-        f"Based on ${daily_revenue:,}/day · {operating_hours}-hr operation · "
-        f"{adj_level.lower()} risk in {neighborhood}</div>"
-        f"</div></div></div>",
-        unsafe_allow_html=True,
-    )
+    # ── Headline card (mode-aware) ────────────────────────────────
+    if risk_mode == "dry":
+        # On a dry day, revenue at risk should be near zero.
+        # Show a calmer card that surfaces the annualized exposure instead.
+        st.markdown(
+            f"<div class='fw-card fw-card-headline fw-card-green'>"
+            f"<div style='display:flex; align-items:center; gap:1.5rem;'>"
+            f"<div style='font-size:2.5rem; font-weight:900; color:#16a34a; line-height:1;'>"
+            f"☀️</div>"
+            f"<div style='flex:1;'>"
+            f"<div style='font-size:0.72rem; color:#64748b; font-weight:700; letter-spacing:0.08em;'>"
+            f"NO IMMEDIATE DISRUPTION EXPECTED</div>"
+            f"<div style='font-size:1.2rem; font-weight:800; color:#15803d;'>"
+            f"Clear operating window</div>"
+            f"<div style='font-size:0.85rem; color:#475569; margin-top:0.15rem;'>"
+            f"Rain forecast {precip_pct}% · scroll down for your annualized exposure "
+            f"and 12-hour operating window</div>"
+            f"</div></div></div>",
+            unsafe_allow_html=True,
+        )
+    else:
+        # Rain is expected or active — show the revenue-at-risk story
+        st.markdown(
+            f"<div class='fw-card fw-card-headline {adj_bg}'>"
+            f"<div style='display:flex; align-items:center; gap:1.5rem;'>"
+            f"<div class='fw-fade-in' style='font-size:3rem; font-weight:900; color:{adj_color}; line-height:1;'>"
+            f"${revenue_at_risk:,}</div>"
+            f"<div style='flex:1;'>"
+            f"<div style='font-size:0.72rem; color:#64748b; font-weight:700; letter-spacing:0.08em;'>"
+            f"REVENUE AT RISK · NEXT 24 HOURS</div>"
+            f"<div style='font-size:1rem; font-weight:600; color:#0f172a;'>"
+            f"{expected_hours_lost:.1f} expected hours of disruption · "
+            f"{int(closure_prob*100)}% closure probability</div>"
+            f"<div style='font-size:0.82rem; color:#64748b; margin-top:0.2rem;'>"
+            f"Based on ${daily_revenue:,}/day · {operating_hours}-hr operation · "
+            f"{adj_level.lower()} risk in {neighborhood}</div>"
+            f"</div></div></div>",
+            unsafe_allow_html=True,
+        )
 
     # ── KPI row ────────────────────────────────────────────────────
     b_k1, b_k2, b_k3, b_k4 = st.columns(4)
