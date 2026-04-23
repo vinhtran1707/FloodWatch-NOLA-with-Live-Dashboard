@@ -636,7 +636,7 @@ with col_brand:
         "border-radius:10px; display:flex; align-items:center; justify-content:center; "
         "font-size:1.4rem;'>🌊</div>"
         "<div><div style='font-size:0.72rem; color:#16a34a; font-weight:700; letter-spacing:0.08em;'>"
-        "CREST · LIVE</div>"
+        "Waterline · LIVE</div>"
         "<div style='font-size:1.6rem; font-weight:800; color:#0f172a; line-height:1.1;'>"
         "Resilience Dashboard</div></div></div>",
         unsafe_allow_html=True,
