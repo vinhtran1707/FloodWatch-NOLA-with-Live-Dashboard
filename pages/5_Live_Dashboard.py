@@ -1223,7 +1223,7 @@ def render_flood_map(
       <div style='font-weight: 700; color: #15803d; font-size: 11px;
                   letter-spacing: 0.06em; margin-bottom: 8px;
                   border-bottom: 1px solid #f0fdf4; padding-bottom: 5px;'>
-        🌊 CREST LEGEND
+        🌊 WATERLINE LEGEND
       </div>
       <div style='font-weight: 700; margin-bottom: 4px; color: #475569;'>Pump Reliability</div>
       <div style='display: flex; align-items: center; gap: 6px; margin-bottom: 3px;'>
@@ -1870,7 +1870,7 @@ st.markdown("<div style='height:1.5rem;'></div>", unsafe_allow_html=True)
 st.markdown(
     "<div style='border-top:1px solid #e2e8f0; padding-top:1rem; "
     "font-size:0.75rem; color:#94a3b8; text-align:center;'>"
-    "🌊 Crest · Built at Tulane University Freeman School of Business · "
+    "🌊 Waterline · Built at Tulane University Freeman School of Business · "
     "Data: NOAA NWS · USGS NWIS · SWBNO · NOLA Open Data · FEMA OpenFEMA"
     "</div>",
     unsafe_allow_html=True,
