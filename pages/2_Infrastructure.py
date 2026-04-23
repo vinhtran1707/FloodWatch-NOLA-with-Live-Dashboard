@@ -14,7 +14,7 @@ from utils.data_fetchers import get_all_data
 from utils.swbno_data import STATUS_COLORS
 
 st.set_page_config(
-    page_title="Infrastructure — FloodWatch NOLA",
+    page_title="Infrastructure — Crest",
     page_icon="⚙️",
     layout="wide",
 )
@@ -33,14 +33,14 @@ stations = swbno.get("stations", [])
 basins = swbno.get("drainage_basins", [])
 
 st.markdown(
-    "<div style='font-size:0.8rem; color:#64748b;'>🌊 FloodWatch NOLA</div>",
+    "<div style='font-size:0.8rem; color:#64748b;'>🌊 Crest</div>",
     unsafe_allow_html=True,
 )
 st.title("⚙️ Infrastructure Status — SWBNO")
 
 # ── Our edge callout ───────────────────────────────────────────────────────
 st.info(
-    "**FloodWatch NOLA is the only platform that integrates real-time SWBNO pump "
+    "**Crest is the only platform that integrates real-time SWBNO pump "
     "station status into flood risk scoring.** National models like First Street and "
     "FEMA assume the drainage system functions at design spec — we don't. "
     "When Turbine 4 failed in August 2017, no national model predicted the flooding "
@@ -387,7 +387,7 @@ st.warning(
     "conditions. The flooding caused an estimated $46M in damage. National risk models "
     "— including First Street Foundation and FEMA's NHFP — did not predict this event "
     "because they assume the drainage system operates at design capacity. "
-    "**FloodWatch NOLA accounts for this.**"
+    "**Crest accounts for this.**"
 )
 
 # ── Data freshness ─────────────────────────────────────────────────────────
@@ -430,7 +430,7 @@ SWBNO_URL = "https://www.swbno.org/Projects/PumpingAndPower"
 def scrape_swbno_static() -> dict | None:
     """Attempt static scrape first (faster)."""
     r = requests.get(SWBNO_URL, timeout=15,
-                     headers={"User-Agent": "FloodWatchNOLA/1.0"})
+                     headers={"User-Agent": "Crest/1.0"})
     if r.status_code != 200:
         return None
     soup = BeautifulSoup(r.text, "lxml")
