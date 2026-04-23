@@ -306,7 +306,7 @@ def _reset_sim() -> None:
 
 # ── Header ─────────────────────────────────────────────────────────────────
 st.markdown(
-    "<div style='font-size:0.8rem; color:#94a3b8;'>🌊 FloodWatch NOLA</div>",
+    "<div style='font-size:0.8rem; color:#64748b;'>🌊 FloodWatch NOLA</div>",
     unsafe_allow_html=True,
 )
 
@@ -630,7 +630,7 @@ if street_scores:
                 f"<b>{seg['name']}</b><br>"
                 f"<span style='color:{color}; font-weight:700; font-size:1.05rem;'>{depth_label}</span><br>"
                 f"<span style='font-size:0.85rem;'>{passability}</span><br>"
-                f"<hr style='margin:4px 0; border-color:#cbd5e1;'>"
+                f"<hr style='margin:4px 0; border-color:#64748b;'>"
                 f"Risk score: {score}/100 &nbsp;·&nbsp; Elev: {seg['elevation_ft']:+.1f} ft<br>"
                 f"Pump: {seg['pump_status']}",
                 max_width=250,
@@ -691,15 +691,15 @@ legend_html = """
 <div style='position:fixed; bottom:30px; right:10px; z-index:9999;
             background:rgba(15,23,42,0.94); padding:12px 16px;
             border-radius:10px; border:1px solid #334155;
-            font-family:sans-serif; font-size:11px; color:#f1f5f9; line-height:1.8;'>
-  <b style='color:#f1f5f9;'>Street Flood Risk</b><br>
+            font-family:sans-serif; font-size:11px; color:#0f172a; line-height:1.8;'>
+  <b style='color:#0f172a;'>Street Flood Risk</b><br>
   <div style='background:linear-gradient(to right,#10b981,#eab308,#ef4444);
               height:8px; border-radius:4px; width:140px; margin:4px 0;'></div>
   <div style='display:flex;justify-content:space-between;width:140px;
-              font-size:9px;color:#cbd5e1;margin-bottom:6px;'>
+              font-size:9px;color:#64748b;margin-bottom:6px;'>
     <span>LOW</span><span>MOD</span><span>HIGH</span>
   </div>
-  <b style='color:#f1f5f9;'>Pump Stations</b><br>
+  <b style='color:#0f172a;'>Pump Stations</b><br>
   <span style='color:#10b981;'>⬤</span> <span style='color:#e2e8f0;'>PUMPING</span> &nbsp;
   <span style='color:#f59e0b;'>⬤</span> <span style='color:#e2e8f0;'>STANDBY</span><br>
   <span style='color:#ef4444;'>⬤</span> <span style='color:#e2e8f0;'>OFFLINE</span>
@@ -731,15 +731,15 @@ with tab1:
 
         for r in sorted(station_results, key=lambda x: x["depth_in"], reverse=True):
             _c        = r["sev_color"]
-            _st_color = STATUS_COLORS.get(r["status"], "#94a3b8")
+            _st_color = STATUS_COLORS.get(r["status"], "#64748b")
             st.markdown(
-                f"<div style='padding:10px 14px; margin-bottom:6px; background:#1e293b; "
-                f"border-left:4px solid {_c}; border-radius:0 8px 8px 0;'>"
-                f"<b style='color:#f1f5f9;'>{r['name']}</b> &nbsp;"
+                f"<div style='padding:10px 14px; margin-bottom:6px; background:#ffffff; border:1px solid #e2e8f0; "
+                f"border-left:4px solid {_c}; border-radius:0 8px 8px 0; box-shadow:0 1px 2px rgba(15,23,42,0.03);'>"
+                f"<b style='color:#0f172a;'>{r['name']}</b> &nbsp;"
                 f"<span style='color:{_st_color}; font-weight:700;'>{r['status']}</span>"
                 f" &nbsp;→&nbsp; "
                 f"<span style='color:{_c}; font-weight:700;'>{r['severity']}</span>"
-                f"<br><span style='color:#94a3b8; font-size:0.8rem;'>"
+                f"<br><span style='color:#64748b; font-size:0.8rem;'>"
                 f"Runoff: {r['runoff_cfs']:,} CFS &nbsp;|&nbsp; "
                 f"Pumping: {r['pump_cfs']:,} CFS &nbsp;|&nbsp; "
                 f"Overflow: {r['overflow_pct']}% &nbsp;|&nbsp; "
