@@ -87,7 +87,7 @@ with st.sidebar:
     st.markdown(
         "<div style='text-align:center; padding:0.75rem 0;'>"
         "<div style='font-size:1.9rem; font-weight:900;'>🌊 FloodWatch NOLA</div>"
-        "<div style='font-size:0.8rem; color:#94a3b8; margin-top:0.2rem;'>"
+        "<div style='font-size:0.8rem; color:#64748b; margin-top:0.2rem;'>"
         "Orleans Parish Resilience Platform</div></div>",
         unsafe_allow_html=True,
     )
@@ -127,7 +127,7 @@ with st.sidebar:
 # ── Header ─────────────────────────────────────────────────────────────────
 col_title, col_live = st.columns([3, 1])
 with col_title:
-    st.markdown("<div style='font-size:0.8rem; color:#94a3b8;'>🌊 FloodWatch NOLA</div>",
+    st.markdown("<div style='font-size:0.8rem; color:#64748b;'>🌊 FloodWatch NOLA</div>",
                 unsafe_allow_html=True)
     st.title("New Orleans Flood Risk Dashboard")
 with col_live:
@@ -136,7 +136,7 @@ with col_live:
     st.markdown(
         f"<div style='text-align:right; padding-top:2rem;'>"
         f"<span style='color:{ind_color}; font-weight:700;'>{indicator}</span><br>"
-        f"<span style='font-size:0.75rem; color:#94a3b8;'>Updated {int(_age_min)}m ago</span>"
+        f"<span style='font-size:0.75rem; color:#64748b;'>Updated {int(_age_min)}m ago</span>"
         f"</div>",
         unsafe_allow_html=True,
     )
@@ -171,7 +171,7 @@ with col_comp:
     for comp_name, comp in risk["components"].items():
         label = comp_name.replace("_", " ").title()
         st.markdown(
-            f"<div style='font-size:0.72rem; color:#94a3b8; margin-top:0.4rem;'>"
+            f"<div style='font-size:0.72rem; color:#64748b; margin-top:0.4rem;'>"
             f"<b>{label}</b> ({int(comp['weight']*100)}%) — {comp['label']}</div>",
             unsafe_allow_html=True,
         )
@@ -195,10 +195,10 @@ with weather_col:
     river_label = "Above action stage" if river_ft > 17 else "Elevated" if river_ft > 14 else "Normal"
 
     st.markdown(
-        f"<div style='background:#1e293b; border-radius:10px; padding:1rem;'>"
-        f"<div style='font-size:2.5rem; font-weight:900; color:#f1f5f9;'>{temp}°{unit}</div>"
-        f"<div style='color:#94a3b8;'>{short_fc}</div>"
-        f"<div style='color:#94a3b8; margin-top:0.5rem; font-size:0.85rem;'>"
+        f"<div style='background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:1rem; box-shadow:0 1px 2px rgba(15,23,42,0.03);'>"
+        f"<div style='font-size:2.5rem; font-weight:900; color:#0f172a;'>{temp}°{unit}</div>"
+        f"<div style='color:#64748b;'>{short_fc}</div>"
+        f"<div style='color:#64748b; margin-top:0.5rem; font-size:0.85rem;'>"
         f"💨 Wind: {wind} {wdir}<br>"
         f"🌧️ Precip: {int(risk['precip_pct'])}%<br>"
         f"<span style='color:{river_color};'>🌊 River: {river_ft:.1f} ft — {river_label}</span>"
@@ -270,8 +270,8 @@ outlook = neighborhood_plain_language(
 )
 _risk_color = risk["color"]
 st.markdown(
-    f"<div style='background:#1e293b; border-radius:10px; padding:1rem 1.25rem; "
-    f"border-left:4px solid {_risk_color}; margin-bottom:0.75rem;'>{outlook}</div>",
+    f"<div style='background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:1rem 1.25rem; "
+    f"color:#0f172a; border-left:4px solid {_risk_color}; margin-bottom:0.75rem;'>{outlook}</div>",
     unsafe_allow_html=True,
 )
 
@@ -293,11 +293,11 @@ if street_scores:
             if seg["nearby_complaints"] > 0 else ""
         )
         st.markdown(
-            f"<div style='padding:8px 12px; margin-bottom:5px; background:#1e293b; "
+            f"<div style='padding:8px 12px; margin-bottom:5px; background:#ffffff; border:1px solid #e2e8f0; "
             f"border-left:4px solid {c}; border-radius:0 6px 6px 0;'>"
-            f"<b style='color:#f1f5f9;'>{seg['name']}</b> "
+            f"<b style='color:#0f172a;'>{seg['name']}</b> "
             f"<span style='color:{c}; font-weight:700;'>{depth_label}</span>{badge}<br>"
-            f"<span style='color:#cbd5e1; font-size:0.78rem;'>"
+            f"<span style='color:#64748b; font-size:0.78rem;'>"
             f"{passability} &nbsp;·&nbsp; Elev: {seg['elevation_ft']:+.1f} ft &nbsp;·&nbsp; Score: {seg['score']}/100"
             f"</span></div>",
             unsafe_allow_html=True,
@@ -379,10 +379,10 @@ with col_right:
         except (ValueError, TypeError):
             loc_str = "No GPS"
         st.markdown(
-            f"<div style='padding:7px 10px; margin-bottom:5px; background:#1e293b; "
+            f"<div style='padding:7px 10px; margin-bottom:5px; background:#ffffff; border:1px solid #e2e8f0; "
             f"border-left:3px solid #a855f7; border-radius:0 6px 6px 0; font-size:0.85rem;'>"
-            f"<b style='color:#f1f5f9;'>{reason[:50]}</b> {'🔵' if is_mock else ''}<br>"
-            f"<span style='color:#94a3b8;'>#{svc_req} · {date} · 📍 {loc_str}</span>"
+            f"<b style='color:#0f172a;'>{reason[:50]}</b> {'🔵' if is_mock else ''}<br>"
+            f"<span style='color:#64748b;'>#{svc_req} · {date} · 📍 {loc_str}</span>"
             f"</div>",
             unsafe_allow_html=True,
         )
@@ -419,9 +419,9 @@ with st.expander("📰 Live Flood Reports — News & Social Media", expanded=Fal
             link_html   = f"<a href='{link}' target='_blank' style='color:#38bdf8;'>→ Read</a>" if link else ""
 
             st.markdown(
-                f"<div style='padding:8px 12px; margin-bottom:6px; background:#1e293b; "
+                f"<div style='padding:8px 12px; margin-bottom:6px; background:#ffffff; border:1px solid #e2e8f0; "
                 f"border-left:3px solid #38bdf8; border-radius:0 6px 6px 0; font-size:0.85rem;'>"
-                f"{icon} <b style='color:#f1f5f9;'>{title[:90]}</b>{mock_badge}<br>"
+                f"{icon} <b style='color:#0f172a;'>{title[:90]}</b>{mock_badge}<br>"
                 f"<span style='color:#64748b;'>{src} · {pub}{score_badge}</span>"
                 f"{'&nbsp;&nbsp;' + link_html if link_html else ''}"
                 f"</div>",
