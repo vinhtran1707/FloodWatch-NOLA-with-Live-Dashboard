@@ -1,5 +1,5 @@
 """
-FloodWatch NOLA — Live Dashboard (client demo surface)
+Crest — Live Dashboard (client demo surface)
 
 Design intent: this page is the sales-demo view we show to prospects.
 It's deliberately distinct from app.py (the consumer homepage):
@@ -77,8 +77,8 @@ except ImportError:
 
 
 # ── Page config + theme override ───────────────────────────────────────────
-st.set_page_config(page_title="Live Dashboard · FloodWatch NOLA",
-                   page_icon="🌿", layout="wide")
+st.set_page_config(page_title="Live Dashboard · Crest",
+                   page_icon="🌊", layout="wide")
 
 # Hard-override any inherited dark styling from the rest of the app.
 # This page is LIGHT. Green + white.
@@ -587,9 +587,9 @@ with st.sidebar:
         "<div style='display:flex; align-items:center; gap:0.6rem;'>"
         "<div style='width:34px; height:34px; background:linear-gradient(135deg,#16a34a,#15803d); "
         "border-radius:8px; display:flex; align-items:center; justify-content:center; "
-        "font-size:1.1rem;'>🌿</div>"
+        "font-size:1.1rem;'>🌊</div>"
         "<div><div style='font-size:0.98rem; font-weight:800; color:#0f172a; line-height:1.1;'>"
-        "FloodWatch NOLA</div>"
+        "Crest</div>"
         "<div style='font-size:0.68rem; color:#16a34a; font-weight:600; letter-spacing:0.05em;'>"
         "LIVE · ORLEANS PARISH</div></div></div></div>",
         unsafe_allow_html=True,
@@ -634,9 +634,9 @@ with col_brand:
         "<div style='display:flex; align-items:center; gap:0.75rem;'>"
         "<div style='width:42px; height:42px; background:linear-gradient(135deg,#16a34a,#15803d); "
         "border-radius:10px; display:flex; align-items:center; justify-content:center; "
-        "font-size:1.4rem;'>🌿</div>"
+        "font-size:1.4rem;'>🌊</div>"
         "<div><div style='font-size:0.72rem; color:#16a34a; font-weight:700; letter-spacing:0.08em;'>"
-        "FLOODWATCH NOLA · LIVE</div>"
+        "CREST · LIVE</div>"
         "<div style='font-size:1.6rem; font-weight:800; color:#0f172a; line-height:1.1;'>"
         "Resilience Dashboard</div></div></div>",
         unsafe_allow_html=True,
@@ -817,18 +817,6 @@ tab_ind, tab_biz = st.tabs(["👤  Individual", "🏢  Small Business"])
 # ───────────────────────────────────────────────────────────────────────────
 # HELPER — render a KPI tile
 # ───────────────────────────────────────────────────────────────────────────
-
-def get_risk_microcopy(level: str) -> str:
-    """Short Apple/Google-style helper copy for the headline risk card."""
-    if level == "LOW":
-        return "Low risk. Flooding is unlikely under current conditions."
-    elif level == "MODERATE":
-        return "Moderate risk. Minor water buildup possible in low-lying areas."
-    elif level == "HIGH":
-        return "High risk. Street flooding and travel disruption are possible."
-    return "Critical risk. Flooding is likely and conditions may become hazardous."
-
-
 def render_tile(label: str, value: str, sub: str = "", accent: str = "green",
                 delay: int = 1):
     """Render a KPI tile. `delay` 1-4 staggers the fade-in animation."""
@@ -1235,7 +1223,7 @@ def render_flood_map(
       <div style='font-weight: 700; color: #15803d; font-size: 11px;
                   letter-spacing: 0.06em; margin-bottom: 8px;
                   border-bottom: 1px solid #f0fdf4; padding-bottom: 5px;'>
-        🌿 FLOODWATCH LEGEND
+        🌊 CREST LEGEND
       </div>
       <div style='font-weight: 700; margin-bottom: 4px; color: #475569;'>Pump Reliability</div>
       <div style='display: flex; align-items: center; gap: 6px; margin-bottom: 3px;'>
@@ -1357,21 +1345,16 @@ with tab_ind:
     # ── Headline strip (mode-aware narrative) ──────────────────────
     # Build the explanation line + optional advisory chip based on risk mode
     has_infra_issue = (reliability["score"] < 75) or (capacity_mult < 0.95)
-    risk_microcopy = get_risk_microcopy(adj_level)
 
     if risk_mode == "dry":
-        # Sunny / low-rain day — keep the main line product-clean and move
-        # the technical explanation into a lighter secondary line.
+        # Sunny / low-rain day — don't penalize for infrastructure, show as advisory
         explanation_html = (
-            f"<div style='font-size:0.85rem; color:#475569; margin-top:0.15rem; "
-            f"font-weight:500;'>"
-            f"{risk_microcopy}"
-            f"</div>"
-            f"<div style='font-size:0.78rem; color:#94a3b8; margin-top:0.2rem;'>"
-            f"Low rain forecast ({precip_pct}%) — current risk reflects weather only"
+            f"<div style='font-size:0.85rem; color:#475569; margin-top:0.15rem;'>"
+            f"☀️ Low rain forecast ({precip_pct}%) — current risk reflects weather only"
             f"</div>"
         )
         if has_infra_issue:
+            # Neutral informational chip, not a score penalty
             issue_text = []
             if reliability["score"] < 75:
                 issue_text.append(f"pump reliability {reliability['score']}/100")
@@ -1387,34 +1370,29 @@ with tab_ind:
                 f"</div>"
             )
     elif risk_mode == "watch":
+        # Some rain expected, moderate compounding
         explanation_html = (
-            f"<div style='font-size:0.85rem; color:#475569; margin-top:0.15rem; "
-            f"font-weight:500;'>"
-            f"{risk_microcopy}"
-            f"</div>"
-            f"<div style='font-size:0.78rem; color:#94a3b8; margin-top:0.2rem;'>"
-            f"Rain expected ({precip_pct}%) — weather {composite_base}"
+            f"<div style='font-size:0.85rem; color:#475569; margin-top:0.15rem;'>"
+            f"🌦️ Rain expected ({precip_pct}%) — weather {composite_base}"
         )
         if reliability_drag + capacity_drag > 0.5:
             explanation_html += (
                 f" + infrastructure +{int(reliability_drag + capacity_drag)} "
-                f"<span style='color:#94a3b8;'>({int(rain_multiplier*100)}% applied)</span>"
+                f"<span style='color:#64748b;'>({int(rain_multiplier*100)}% applied)</span>"
             )
         explanation_html += "</div>"
     else:  # active
+        # Rain is happening, show full compounding story
         explanation_html = (
-            f"<div style='font-size:0.85rem; color:#475569; margin-top:0.15rem; "
-            f"font-weight:500;'>"
-            f"{risk_microcopy}"
-            f"</div>"
-            f"<div style='font-size:0.78rem; color:#94a3b8; margin-top:0.2rem;'>"
-            f"Active rain ({precip_pct}%) — weather {composite_base}"
+            f"<div style='font-size:0.85rem; color:#475569; margin-top:0.15rem;'>"
+            f"🌧️ Active rain ({precip_pct}%) — weather {composite_base}"
         )
         if reliability_drag > 0.5:
             explanation_html += f" + pump reliability +{int(reliability_drag)}"
         if capacity_drag > 0.5:
             explanation_html += f" + drainage capacity +{int(capacity_drag)}"
         explanation_html += "</div>"
+
     st.markdown(
         f"<div class='fw-card fw-card-headline {adj_bg}' style='margin-top:1rem;'>"
         f"<div style='display:flex; align-items:center; gap:1.5rem;'>"
@@ -1892,7 +1870,7 @@ st.markdown("<div style='height:1.5rem;'></div>", unsafe_allow_html=True)
 st.markdown(
     "<div style='border-top:1px solid #e2e8f0; padding-top:1rem; "
     "font-size:0.75rem; color:#94a3b8; text-align:center;'>"
-    "🌿 FloodWatch NOLA · Built at Tulane University Freeman School of Business · "
+    "🌊 Crest · Built at Tulane University Freeman School of Business · "
     "Data: NOAA NWS · USGS NWIS · SWBNO · NOLA Open Data · FEMA OpenFEMA"
     "</div>",
     unsafe_allow_html=True,
