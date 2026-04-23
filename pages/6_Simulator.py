@@ -19,7 +19,7 @@ from utils.risk_engine import compute_risk_score, score_neighborhood_streets
 from utils.swbno_data import STATUS_COLORS
 
 st.set_page_config(
-    page_title="Storm Simulator — Crest",
+    page_title="Storm Simulator — Waterline",
     page_icon="⛈️",
     layout="wide",
 )
