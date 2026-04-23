@@ -169,17 +169,17 @@ if basins:
             f"<td style='padding:8px 12px; border-bottom:1px solid #334155;'>{b['basin']}</td>"
             f"<td style='padding:8px 12px; border-bottom:1px solid #334155;'>"
             f"<span style='color:{color}; font-weight:700;'>{coverage}</span></td>"
-            f"<td style='padding:8px 12px; border-bottom:1px solid #334155; color:#94a3b8;'>{b['notes']}</td>"
+            f"<td style='padding:8px 12px; border-bottom:1px solid #334155; color:#64748b;'>{b['notes']}</td>"
             f"</tr>"
         )
     st.markdown(
         f"""
         <table style='width:100%; border-collapse:collapse; font-size:0.9rem;'>
           <thead>
-            <tr style='background:#1e293b;'>
-              <th style='padding:10px 12px; text-align:left; color:#94a3b8;'>Basin</th>
-              <th style='padding:10px 12px; text-align:left; color:#94a3b8;'>Pump Coverage</th>
-              <th style='padding:10px 12px; text-align:left; color:#94a3b8;'>Notes</th>
+            <tr style='background:#f1f5f9;'>
+              <th style='padding:10px 12px; text-align:left; color:#475569;'>Basin</th>
+              <th style='padding:10px 12px; text-align:left; color:#475569;'>Pump Coverage</th>
+              <th style='padding:10px 12px; text-align:left; color:#475569;'>Notes</th>
             </tr>
           </thead>
           <tbody>{rows_html}</tbody>
@@ -275,12 +275,13 @@ for i, row in enumerate(strain_data):
     with strain_cols[i % 4]:
         c = row["_color"]
         st.markdown(
-            f"<div style='background:#1e293b; border:1px solid {c}60; border-top:3px solid {c}; "
-            f"border-radius:8px; padding:10px 12px; margin-bottom:10px; font-size:0.82rem;'>"
-            f"<b style='font-size:0.95rem; color:#f1f5f9;'>{row['Station']}</b><br>"
-            f"<span style='color:#cbd5e1;'>{row['Neighborhood']}</span><br>"
+            f"<div style='background:#ffffff; border:1px solid {c}60; border-top:3px solid {c}; "
+            f"border-radius:8px; padding:10px 12px; margin-bottom:10px; font-size:0.82rem;"
+            f" box-shadow:0 1px 2px rgba(15,23,42,0.03);'>"
+            f"<b style='font-size:0.95rem; color:#0f172a;'>{row['Station']}</b><br>"
+            f"<span style='color:#64748b;'>{row['Neighborhood']}</span><br>"
             f"<span style='color:{c}; font-weight:700;'>{row['Strain']} Strain</span><br>"
-            f"<span style='color:#94a3b8;'>311 nearby: {row['311 Reports Nearby']} &nbsp;·&nbsp; "
+            f"<span style='color:#64748b;'>311 nearby: {row['311 Reports Nearby']} &nbsp;·&nbsp; "
             f"Elev: {row['Elevation (ft)']:+.1f} ft</span>"
             f"</div>",
             unsafe_allow_html=True,
@@ -363,13 +364,13 @@ with hist_tab2:
             f"""
             <div style='border-left: 3px solid {depth_color}; padding: 10px 16px;
                         margin-bottom: 12px; background: #1e293b; border-radius: 0 8px 8px 0;'>
-              <div style='font-size:0.8rem; color:#94a3b8;'>{ev["date"]}</div>
-              <div style='font-weight:700; font-size:1rem; color:#f1f5f9;'>{ev["event"]}</div>
-              <div style='color:#cbd5e1; font-size:0.85rem; margin-top:4px;'>
+              <div style='font-size:0.8rem; color:#64748b;'>{ev["date"]}</div>
+              <div style='font-weight:700; font-size:1rem; color:#0f172a;'>{ev["event"]}</div>
+              <div style='color:#64748b; font-size:0.85rem; margin-top:4px;'>
                 Peak depth: <span style='color:{depth_color}; font-weight:600;'>{ev["peak_depth_ft"]} ft</span>
                 &nbsp;|&nbsp; {ev["impact"]}
               </div>
-              <div style='color:#94a3b8; font-size:0.8rem; margin-top:3px;'>
+              <div style='color:#64748b; font-size:0.8rem; margin-top:3px;'>
                 ⚙️ {ev["infrastructure"]}
               </div>
             </div>
