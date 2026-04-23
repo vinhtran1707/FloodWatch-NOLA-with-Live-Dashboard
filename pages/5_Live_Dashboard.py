@@ -308,16 +308,34 @@ st.markdown("""
 
   /* ─── Force LIGHT mode on all form inputs ─── */
 
-  /* Labels above every widget */
+  /* Labels above every widget — hit every possible wrapper */
   [data-testid="stWidgetLabel"],
+  [data-testid="stWidgetLabel"] > div,
   [data-testid="stWidgetLabel"] p,
   [data-testid="stWidgetLabel"] label,
+  [data-testid="stWidgetLabel"] span,
   .stSelectbox label,
   .stTextInput label,
-  .stNumberInput label {
+  .stNumberInput label,
+  label[data-testid="stWidgetLabel"] {
     color: #475569 !important;
+    background-color: transparent !important;
     font-weight: 600 !important;
     font-size: 0.82rem !important;
+  }
+
+  /* Nuke any background on the full widget wrapper — this is what was rendering as the black bar */
+  [data-testid="stTextInput"],
+  [data-testid="stSelectbox"],
+  [data-testid="stNumberInput"],
+  [data-testid="stSearchbox"] {
+    background-color: transparent !important;
+  }
+  [data-testid="stTextInput"] > div,
+  [data-testid="stSelectbox"] > div,
+  [data-testid="stNumberInput"] > div,
+  [data-testid="stSearchbox"] > div {
+    background-color: transparent !important;
   }
 
   /* ── Searchbox (streamlit_searchbox component) ── */
