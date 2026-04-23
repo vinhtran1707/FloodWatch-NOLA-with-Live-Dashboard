@@ -1,5 +1,5 @@
 """
-Crest — Live Dashboard (client demo surface)
+Waterline — Live Dashboard (client demo surface)
 
 Design intent: this page is the sales-demo view we show to prospects.
 It's deliberately distinct from app.py (the consumer homepage):
