@@ -12,7 +12,7 @@ from utils.data_fetchers import get_all_data
 from utils.risk_engine import compute_risk_score
 
 st.set_page_config(
-    page_title="FloodBot — Crest",
+    page_title="FloodBot — Waterline",
     page_icon="🤖",
     layout="wide",
 )
