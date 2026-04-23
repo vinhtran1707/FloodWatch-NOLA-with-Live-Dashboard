@@ -305,6 +305,149 @@ st.markdown("""
   .fw-delay-2 { animation-delay: 0.15s; }
   .fw-delay-3 { animation-delay: 0.25s; }
   .fw-delay-4 { animation-delay: 0.35s; }
+
+  /* ─── Force LIGHT mode on all form inputs ─── */
+
+  /* Labels above every widget */
+  [data-testid="stWidgetLabel"],
+  [data-testid="stWidgetLabel"] p,
+  [data-testid="stWidgetLabel"] label,
+  .stSelectbox label,
+  .stTextInput label,
+  .stNumberInput label {
+    color: #475569 !important;
+    font-weight: 600 !important;
+    font-size: 0.82rem !important;
+  }
+
+  /* ── Searchbox (streamlit_searchbox component) ── */
+  [data-testid="stSearchbox"] div[data-baseweb="select"] > div,
+  [data-testid="stSearchbox"] div[data-baseweb="input"] > div,
+  div[data-baseweb="select"] > div,
+  div[data-baseweb="input"] {
+    background-color: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 10px !important;
+    color: #0f172a !important;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03) !important;
+  }
+  div[data-baseweb="select"] > div:hover,
+  div[data-baseweb="input"]:hover {
+    border-color: #16a34a !important;
+  }
+  div[data-baseweb="select"] > div:focus-within,
+  div[data-baseweb="input"]:focus-within {
+    border-color: #16a34a !important;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15) !important;
+  }
+
+  /* Input text itself + placeholder */
+  div[data-baseweb="select"] input,
+  div[data-baseweb="input"] input,
+  input[type="text"],
+  input[type="number"] {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    caret-color: #16a34a !important;
+  }
+  div[data-baseweb="select"] input::placeholder,
+  div[data-baseweb="input"] input::placeholder,
+  input::placeholder {
+    color: #94a3b8 !important;
+    opacity: 1 !important;
+  }
+
+  /* Displayed value / single-value text in selectboxes */
+  div[data-baseweb="select"] [data-testid="stMarkdownContainer"],
+  div[data-baseweb="select"] > div > div,
+  div[data-baseweb="select"] div[role="combobox"] {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  /* Selectbox dropdown caret icon */
+  div[data-baseweb="select"] svg {
+    fill: #64748b !important;
+    color: #64748b !important;
+  }
+
+  /* ── Dropdown menu that pops open ── */
+  div[data-baseweb="popover"] {
+    background-color: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12) !important;
+  }
+  div[data-baseweb="popover"] ul,
+  ul[role="listbox"] {
+    background-color: #ffffff !important;
+  }
+  li[role="option"],
+  div[data-baseweb="popover"] li {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    padding: 10px 14px !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+  }
+  li[role="option"]:hover,
+  li[role="option"][aria-selected="true"] {
+    background-color: #f0fdf4 !important;
+    color: #15803d !important;
+  }
+  li[role="option"]:last-child {
+    border-bottom: none !important;
+  }
+
+  /* ── Number inputs (business tab — revenue, hours, employees) ── */
+  .stNumberInput > div > div,
+  .stNumberInput [data-baseweb="input"] {
+    background-color: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 10px !important;
+  }
+  .stNumberInput button {
+    background-color: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+    color: #475569 !important;
+  }
+  .stNumberInput button:hover {
+    background-color: #f0fdf4 !important;
+    color: #15803d !important;
+  }
+
+  /* ── Refresh button ── */
+  .stButton > button {
+    background-color: #ffffff !important;
+    color: #15803d !important;
+    border: 1px solid #bbf7d0 !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    transition: all 0.15s ease !important;
+  }
+  .stButton > button:hover {
+    background-color: #f0fdf4 !important;
+    border-color: #16a34a !important;
+    color: #15803d !important;
+  }
+  .stButton > button:active,
+  .stButton > button:focus {
+    background-color: #dcfce7 !important;
+    border-color: #16a34a !important;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15) !important;
+  }
+
+  /* ── Clear "X" button inside searchbox ── */
+  [data-testid="stSearchbox"] button,
+  div[data-baseweb="select"] button {
+    background-color: transparent !important;
+    color: #94a3b8 !important;
+    border: none !important;
+  }
+  [data-testid="stSearchbox"] button:hover,
+  div[data-baseweb="select"] button:hover {
+    color: #ef4444 !important;
+    background-color: transparent !important;
+  }
 </style>
 """, unsafe_allow_html=True)
 
