@@ -589,7 +589,7 @@ with st.sidebar:
         "border-radius:8px; display:flex; align-items:center; justify-content:center; "
         "font-size:1.1rem;'>🌊</div>"
         "<div><div style='font-size:0.98rem; font-weight:800; color:#0f172a; line-height:1.1;'>"
-        "Crest</div>"
+        "Waterline</div>"
         "<div style='font-size:0.68rem; color:#16a34a; font-weight:600; letter-spacing:0.05em;'>"
         "LIVE · ORLEANS PARISH</div></div></div></div>",
         unsafe_allow_html=True,
