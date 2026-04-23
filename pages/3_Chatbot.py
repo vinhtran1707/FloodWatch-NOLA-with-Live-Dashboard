@@ -12,7 +12,7 @@ from utils.data_fetchers import get_all_data
 from utils.risk_engine import compute_risk_score
 
 st.set_page_config(
-    page_title="FloodBot — FloodWatch NOLA",
+    page_title="FloodBot — Crest",
     page_icon="🤖",
     layout="wide",
 )
@@ -187,7 +187,7 @@ def _stream_response(messages: list[dict], system: str):
 
 # ── Page layout ────────────────────────────────────────────────────────────
 st.markdown(
-    "<div style='font-size:0.8rem; color:#64748b;'>🌊 FloodWatch NOLA</div>",
+    "<div style='font-size:0.8rem; color:#64748b;'>🌊 Crest</div>",
     unsafe_allow_html=True,
 )
 st.title("🤖 FloodBot — AI Flood Navigator")
