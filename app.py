@@ -21,7 +21,7 @@ from utils.risk_engine import (
 from utils.swbno_data import STATUS_COLORS
 
 st.set_page_config(
-    page_title="Crest",
+    page_title="waterline",
     page_icon="🌊",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -86,7 +86,7 @@ street_scores = sorted(_best_by_name.values(), key=lambda s: s["score"], reverse
 with st.sidebar:
     st.markdown(
         "<div style='text-align:center; padding:0.75rem 0;'>"
-        "<div style='font-size:1.9rem; font-weight:900;'>🌊 Crest</div>"
+        "<div style='font-size:1.9rem; font-weight:900;'>🌊 waterline</div>"
         "<div style='font-size:0.8rem; color:#64748b; margin-top:0.2rem;'>"
         "Orleans Parish Resilience Platform</div></div>",
         unsafe_allow_html=True,
@@ -127,7 +127,7 @@ with st.sidebar:
 # ── Header ─────────────────────────────────────────────────────────────────
 col_title, col_live = st.columns([3, 1])
 with col_title:
-    st.markdown("<div style='font-size:0.8rem; color:#64748b;'>🌊 Crest</div>",
+    st.markdown("<div style='font-size:0.8rem; color:#64748b;'>🌊 waterline</div>",
                 unsafe_allow_html=True)
     st.title("New Orleans Flood Risk Dashboard")
 with col_live:
